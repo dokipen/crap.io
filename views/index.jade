@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 Crap.io
+  p Welcome, take a crap on the internet!
+
+  form(name="crap", action="/crap", method="post")
+    ul
+      li
+        textarea(name="blob", rows="40", cols="80")
+      li
+        input(name="views", value="10")
+      li
+        input(type="submit", value="CRAP!")
