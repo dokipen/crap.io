@@ -25,18 +25,49 @@ exports.crap = function(req, res){
   converter.stdin.end(req.body.blob, "utf-8", function() {
     console.log('ending stream');
   });
-  redis.set(digest, req.body.views);
+  redis.set("view_limit:" + digest, req.body.views, function(err) {
+    if (req.body.global_ttl) {
+      redis.ttl("view_limit:" + digest, req.body.global_ttl);
+    }
+  });
+  redis.set("view_ttl:" + digest, req.body.view_ttl || 10);
   res.redirect("/share/"+digest);
 };
+
+exports.view = function(req, res) {
+  redis.get("view_ttl:" + digest, function(err, ttl) {
+    res.render('view', { ttl: ttl });
+  });
+}
 
 exports.share = function(req, res) {
   res.render('share', req.params);
 }
 
 exports.image = function(req, res) {
-  Q.nfcall(redis.hexists.bind(redis), req.params.hash, req.ip).done(function() {
-    console.log(arguments);
-    res.sendfile(req.params.hash + ".png", {root: './images'});
-    //res.render('flushed', req.params);
-  })
+  var id = req.params.hash;
+
+  redis.get('view_limit:' + id, function(err, limit) {
+    if (limit && limit > 0) {
+      redis.hexists('ips:' + id, req.ip, function(err, e) {
+        if (e == 0) {
+         res.sendfile(id + ".png", { root: './images' });
+         redis.hincrby('ips:' + id, req.ip, 1, function(err, e) {
+           redis.hkeys('ips:' + id, function(err, keys) {
+             redis.get('view_limit:' + id, function(err, limit) {
+               if (keys.length >= Number(limit)) {
+                 fs.unlink('./images/' + id + ".png");
+                 redis.del('view_limit:' + id);
+               }
+             });
+           });
+         });
+        } else {
+          res.render('flushed', req.params)
+        }
+      });
+    } else {
+      res.render('flushed', req.params)
+    }
+  });
 }
