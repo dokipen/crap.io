@@ -30,8 +30,9 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.post('/crap', routes.crap);
-app.get('/share/:hash', routes.share);
-app.get('/image/(:hash).png', routes.image);
+app.get('/share/:id', routes.share);
+app.get('/image/(:id).png', routes.image);
+app.get('/view/(:id)', routes.image);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), "0.0.0.0", function(){
