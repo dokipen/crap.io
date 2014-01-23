@@ -1,0 +1,37 @@
+<div class="col-sm-12 intro">
+  <p class="lead">Welcome, relax and take a crap on the internet.</p>
+</div>
+<form name="crap" action="/crap" method="post" role="form" class="form-horizontal">
+  <div class="form-group">
+    <label for="blob" class="col-sm-2 control-label">Post</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" name="blob" id="blob" rows="40" cols="80" placeholder="What do you want to say?"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="view_limit" class="col-sm-2 control-label">View Limit</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="view_limit" id="view_limit" value="10">
+      <p class="help-block">How many individuals can look at the post?</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="view_ttl" class="col-sm-2 control-label">View TTL</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="view_ttl" id="view_ttl" value="10">
+      <p class="help-block">How many seconds can one person look at the post?</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="global_ttl" class="col-sm-2 control-label">Post TTL</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="global_ttl" id="global_ttl" value="10">
+      <p class="help-block">How many seconds should the post live?</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button class="btn btn-default" type="submit">Crap!</button>
+    </div>
+  </div>
+</form>

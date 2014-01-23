@@ -1,0 +1,11 @@
+<img id="post" src="/image/{{id}}.png" />
+<script>
+var ttl = {{ttl}} * 1000;
+
+jQuery(function($) {
+  setTimeout(function() {
+    $('#post').attr('src', '/image/flushed.png');
+    console.log('flush!');
+  }, ttl);
+});
+</script>

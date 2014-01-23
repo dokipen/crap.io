@@ -12,9 +12,11 @@ var path = require('path');
 var app = express();
 
 // all environments
+app.engine('mustache', (require('mustache-express'))());
+app.engine('handlebars', require('express3-handlebars')({defaultLayout: 'main'}));
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'mustache');
+app.set('view engine', 'handlebars');
 app.set('host', process.env.HOST || 'http://localhost:3000');
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -33,7 +35,7 @@ app.get('/', routes.index);
 app.post('/crap', routes.crap);
 app.get('/share/:id', routes.share);
 app.get('/image/(:id).png', routes.image);
-app.get('/view/(:id)', routes.image);
+app.get('/view/:id', routes.view);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), "0.0.0.0", function(){

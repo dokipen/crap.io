@@ -19,24 +19,23 @@ exports.crap = function(req, res){
   var id = shasum.digest('hex').substr(0, 6);
 
   var converter = spawn("convert", ["text:-", "png:-"]);
-  console.log('created stream')
   converter.stdout.pipe(fs.createWriteStream("images/" + id + ".png"));
-  console.log('piped output to file')
   converter.stdin.end(req.body.blob, "utf-8", function() {
     console.log('ending stream');
   });
-  redis.set("view_limit:" + id, req.body.views, function(err) {
+  redis.set("view_limit:" + id, req.body.view_limit, function(err) {
     if (req.body.global_ttl) {
-      redis.ttl("view_limit:" + id, req.body.global_ttl);
+      redis.ttl("view_limit:" + id, req.body.global_ttl, function(){});
     }
   });
-  redis.set("view_ttl:" + id, req.body.view_ttl || 10);
+  redis.set("view_ttl:" + id, req.body.view_ttl || 10, function(){});
   res.redirect("/share/" + id);
 };
 
 exports.view = function(req, res) {
+  var id = req.params.id;
   redis.get("view_ttl:" + id, function(err, ttl) {
-    res.render('view', { ttl: ttl, id: req.params.id });
+    res.render('view', { ttl: ttl || 0, id: req.params.id });
   });
 }
 
@@ -63,11 +62,11 @@ exports.image = function(req, res) {
            });
          });
         } else {
-          res.render('flushed', req.params)
+          res.sendfile('flushed.png', {root: './images'})
         }
       });
     } else {
-      res.render('flushed', req.params)
+      res.sendfile('flushed.png', {root: './images'})
     }
   });
 }
