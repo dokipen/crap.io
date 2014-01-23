@@ -41,7 +41,7 @@ exports.view = function(req, res) {
 }
 
 exports.share = function(req, res) {
-  res.render('share', req.params);
+  res.render('share', {id: req.params.id, host: req.app.get('host')});
 }
 
 exports.image = function(req, res) {
