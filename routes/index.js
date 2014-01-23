@@ -43,6 +43,10 @@ exports.share = function(req, res) {
   res.render('share', {id: req.params.id, host: req.app.get('host')});
 }
 
+exports.about = function(req, res) {
+  res.render('about');
+}
+
 exports.image = function(req, res) {
   var id = req.params.id;
 
