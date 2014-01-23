@@ -1,2 +1,4 @@
 out.png
 *.log
+images/*.png
+!images/flushed.png

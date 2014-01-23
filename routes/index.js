@@ -47,6 +47,14 @@ exports.about = function(req, res) {
   res.render('about');
 }
 
+exports.reset = function(req, res) {
+  if (process.env.SECRET && process.env.SECRET == req.param('secret')) {
+    process.exit(0);
+  } else {
+    res.end('No way')
+  }
+}
+
 exports.image = function(req, res) {
   var id = req.params.id;
 
